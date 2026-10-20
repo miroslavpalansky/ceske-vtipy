@@ -45,6 +45,7 @@ In the repository, edit `config.js` and set `API_URL: 'https://script.google.com
 - **Review list:** column P *Ke kontrole* names why a joke might not be fit to publish (racism, Holocaust, children and sex…). It is only a note for you: the site never shows it, and the joke stays live until you untick *Na webu*. Use the filter on the header row to show only flagged rows.
 - **Hlasy** tab: one row per vote change, used for Trendy. The script deletes rows older than 30 days by itself; don't edit it.
 - **Score** (column G) is a formula; sort or filter by it in the sheet, but don't type into it.
+- After changing the website files: raise the `?v=` number in `index.html` and `sw.js` (and `VERSION` in `sw.js`), so phones that already visited pick up the new version.
 - After changing `Code.gs`: **Deploy → Manage deployments → Edit → Version: New version**, so the web app URL stays the same.
 
 ## Limits worth knowing

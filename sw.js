@@ -1,7 +1,7 @@
 /* České vtipy – service worker: makes the app installable and work offline. */
 const VERSION = 'vtipy-v5';
 const SHELL = [
-  './', 'index.html', 'styles.css', 'app.js', 'config.js', 'manifest.webmanifest', 'favicon.ico',
+  './', 'index.html', 'styles.css?v=5', 'app.js?v=5', 'config.js?v=5', 'manifest.webmanifest', 'favicon.ico',
   'icons/logo-64.png', 'icons/icon-192.png',
   'fonts/big-shoulders-display-latin-600-normal.woff2', 'fonts/big-shoulders-display-latin-800-normal.woff2',
   'fonts/big-shoulders-display-latin-900-normal.woff2', 'fonts/big-shoulders-display-latin-ext-600-normal.woff2',
@@ -10,7 +10,7 @@ const SHELL = [
 ];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL.map((u) => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
