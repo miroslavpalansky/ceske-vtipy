@@ -7,10 +7,12 @@
  *   POST {a:'vote',   id, v, prev}            -> v / prev: 1 = thumbs up, -1 = thumbs down, 0 = none
  *   POST {a:'submit', text, name}             -> a visitor's joke, saved hidden until approved
  *
- * Run setup() once from the editor after pasting this file.
+ * Run setup() once from the editor after pasting this file. Jokes typed into the sheet by hand get their ID,
+ * source and date the next time the site loads the jokes (at most a couple of minutes later).
  */
 
 var CONFIG = {
+  SPREADSHEET_ID: '1-jrhSP4u3oM2cihMNxuC_Wbsv4dePB0pXAM9IQ00Ymk', // the sheet "České vtipy – databáze"
   TZ: 'Europe/Prague',
   SHEET: 'Vtipy',
   LOG: 'Hlasy',
@@ -79,7 +81,9 @@ function json_(obj) {
 
 /* ------------------------------------------------------------------- data */
 
-function sheet_(name) { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name); }
+var SS = null;
+function ss_() { return SS || (SS = SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID)); }
+function sheet_(name) { return ss_().getSheetByName(name); }
 function todayKey_() { return Utilities.formatDate(new Date(), CONFIG.TZ, 'yyyy-MM-dd'); }
 function isTrue_(v) { return v === true || String(v).toUpperCase() === 'TRUE'; }
 function num_(v) { var n = Number(v); return isFinite(n) && n > 0 ? Math.floor(n) : 0; }
@@ -173,7 +177,7 @@ function findRowById_(sh, id) {
 /* ---------------------------------------------------- vote log and trending */
 
 function logSheet_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = ss_();
   var sh = ss.getSheetByName(CONFIG.LOG);
   if (!sh) {
     sh = ss.insertSheet(CONFIG.LOG);

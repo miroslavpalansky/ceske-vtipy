@@ -1,5 +1,5 @@
 /* České vtipy – service worker: makes the app installable and work offline. */
-const VERSION = 'vtipy-v4';
+const VERSION = 'vtipy-v5';
 const SHELL = [
   './', 'index.html', 'styles.css', 'app.js', 'config.js', 'manifest.webmanifest', 'favicon.ico',
   'icons/logo-64.png', 'icons/icon-192.png',
