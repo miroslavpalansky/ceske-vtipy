@@ -96,6 +96,14 @@ function readRows_() {
   return sh.getRange(2, 1, last - 1, NCOL).getValues();
 }
 
+/** First row below the last joke. Empty checkboxes further down count as content for getLastRow(), so look at ID and text. */
+function nextFreeRow_(rows) {
+  for (var i = rows.length - 1; i >= 0; i--) {
+    if (String(rows[i][COL.text]).trim() !== '' || String(rows[i][COL.id]).trim() !== '') return i + 3;
+  }
+  return 2;
+}
+
 function maxId_(rows) {
   var m = 0;
   rows.forEach(function (r) { var n = Number(r[COL.id]); if (n > m) m = n; });
@@ -243,7 +251,7 @@ function submit_(text, name, honeypot) {
       if (simplify_(String(rows[i][COL.text])) === key) return { ok: true, duplicate: true };
     }
     var sh = sheet_(CONFIG.SHEET);
-    var row = sh.getLastRow() + 1;
+    var row = nextFreeRow_(rows);
     sh.getRange(row, COL.text + 1).setNumberFormat('@');
     setCells_(sh, row, { id: maxId_(rows) + 1, text: text, src: SRC_READER, web: false, up: 0, down: 0, by: name, added: todayKey_() });
     cache.put(hourKey, String(count + 1), 3600);
