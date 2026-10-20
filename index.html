@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>České vtipy</title>
+<meta name="description" content="Smutné ráno + dobrý vtip = veselé ráno. Švihněte doprava, když se zasmějete.">
+<meta name="theme-color" content="#FFE600" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Vtipy">
+<meta property="og:type" content="website">
+<meta property="og:title" content="České vtipy">
+<meta property="og:description" content="Smutné ráno + dobrý vtip = veselé ráno">
+<meta property="og:image" content="https://miroslavpalansky.github.io/ceske-vtipy/icons/icon-512.png">
+<meta property="og:url" content="https://miroslavpalansky.github.io/ceske-vtipy/">
+<meta name="twitter:card" content="summary">
+<link rel="preload" href="fonts/big-shoulders-display-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/literata-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<script src="config.js"></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <img class="logo" src="icons/logo-64.png" width="64" height="64" alt="">
+    <div class="brand">
+      <h1>České vtipy</h1>
+      <p class="tagline">Smutné ráno + dobrý vtip = veselé ráno</p>
+    </div>
+    <button class="submit-btn" type="button" id="submitBtn">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+      Pošli nám vtip
+    </button>
+  </header>
+
+  <!-- Vtipy: the swipe deck -->
+  <main class="view view-swipe" id="viewSwipe" data-view="swipe">
+    <h2 class="vh">Vtipy</h2>
+    <div class="deck" id="deck" aria-live="polite"></div>
+    <p class="progress" id="progress">&nbsp;</p>
+    <div class="controls">
+      <button class="ctl small" type="button" id="undoBtn" aria-label="Vrátit poslední" disabled>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05 1-6.9 2.6L2 7v9h9l-3.62-3.62A7.95 7.95 0 0 1 12.5 10c3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 10.53 17.15 8 12.5 8Z"/></svg>
+      </button>
+      <button class="ctl down" type="button" id="downBtn" aria-label="Nic moc (švihnutí doleva)">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 3h-4v12h4V3ZM2 14a2 2 0 0 0 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L10.83 23l6.58-6.59A2 2 0 0 0 18 15V5a2 2 0 0 0-2-2H7a2 2 0 0 0-1.84 1.22l-3.02 7.05A2 2 0 0 0 2 12Z"/></svg>
+      </button>
+      <button class="ctl up" type="button" id="upBtn" aria-label="Haha (švihnutí doprava)">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 21h4V9H2v12Zm20-11a2 2 0 0 0-2-2h-6.31l.95-4.57.03-.32a1.5 1.5 0 0 0-.44-1.06L13.17 1 6.59 7.59A2 2 0 0 0 6 9v10a2 2 0 0 0 2 2h9a2 2 0 0 0 1.84-1.22l3.02-7.05A2 2 0 0 0 22 12Z"/></svg>
+      </button>
+      <button class="ctl small" type="button" id="shareBtn" aria-label="Sdílet vtip">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 16.1a2.9 2.9 0 0 0-1.96.77l-7.13-4.15a3.2 3.2 0 0 0 0-1.44l7.05-4.11A3 3 0 1 0 15 5a3.2 3.2 0 0 0 .09.72L8.04 9.83a3 3 0 1 0 0 4.34l7.12 4.16a2.8 2.8 0 0 0-.08.67A2.92 2.92 0 1 0 18 16.1Z"/></svg>
+      </button>
+    </div>
+  </main>
+
+  <!-- Žebříček -->
+  <section class="view view-list" id="viewTop" data-view="top" hidden aria-labelledby="topTitle">
+    <div class="list-head">
+      <h2 id="topTitle">Žebříček</h2>
+      <div class="seg" role="radiogroup" aria-label="Období">
+        <button type="button" role="radio" data-rank="trend" aria-checked="true">Trendy</button>
+        <button type="button" role="radio" data-rank="all" aria-checked="false">Všech dob</button>
+      </div>
+    </div>
+    <p class="list-note" id="topNote"></p>
+    <div class="chips" id="catChips" role="group" aria-label="Kategorie" hidden></div>
+    <ol class="list ranked" id="topList"></ol>
+    <p class="empty" id="topEmpty" hidden>Žebříček se plní, jak lidé hlasují. Švihněte pár vtipů a vraťte se.</p>
+  </section>
+
+  <!-- Moje -->
+  <section class="view view-list" id="viewMine" data-view="mine" hidden aria-labelledby="mineTitle">
+    <div class="list-head">
+      <h2 id="mineTitle">Moje vtipy <span class="n" id="mineCount"></span></h2>
+    </div>
+    <ul class="list" id="mineList"></ul>
+    <p class="empty" id="mineEmpty" hidden>Vtipy, které švihnete doprava, se uloží sem. Ať je máte po ruce, až je budete chtít někomu povědět.</p>
+    <div class="about">
+      <p>Hodnocení a vaše vtipy se ukládají jen v tomto zařízení.</p>
+      <p><button type="button" class="linkish" id="installBtn" hidden>Přidat na plochu</button>
+        <span id="iosHint" hidden>Na iPhonu: Sdílet → Přidat na plochu.</span></p>
+    </div>
+  </section>
+
+  <nav class="tabs" aria-label="Sekce">
+    <a href="#" data-tab="swipe" aria-current="page">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3h12a2 2 0 0 1 2 2v12h-2V5H7V3Zm-2 4h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/></svg>
+      Vtipy
+    </a>
+    <a href="#zebricek" data-tab="top">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 21H3V11h6v10Zm6 0H9V3h6v18Zm6 0h-6v-7h6v7Z"/></svg>
+      Žebříček
+    </a>
+    <a href="#moje" data-tab="mine">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A6 6 0 0 1 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35Z"/></svg>
+      Moje
+    </a>
+  </nav>
+</div>
+
+<dialog id="submitDlg" aria-labelledby="submitTitle">
+  <form id="submitForm">
+    <h3 id="submitTitle">Pošli nám vtip</h3>
+    <label>Váš vtip
+      <textarea id="subText" rows="6" maxlength="1000" required></textarea>
+    </label>
+    <p class="hint"><span id="subCount">0</span> / 1000 znaků. Vtip se objeví, až ho schválíme.</p>
+    <label>Podpis (nepovinné)
+      <input id="subName" maxlength="40" autocomplete="nickname">
+    </label>
+    <label class="hp" aria-hidden="true">Web <input id="subHp" tabindex="-1" autocomplete="off"></label>
+    <div class="dlg-actions">
+      <button type="button" class="quiet" id="subCancel">Zrušit</button>
+      <button type="submit" class="primary" id="subSend">Poslat vtip</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="shareDlg" aria-labelledby="shareTitle">
+  <form method="dialog">
+    <h3 id="shareTitle">Sdílet vtip</h3>
+    <div class="share-grid">
+      <a id="shWa" target="_blank" rel="noopener">WhatsApp</a>
+      <a id="shFb" target="_blank" rel="noopener">Facebook</a>
+      <a id="shX" target="_blank" rel="noopener">X</a>
+      <a id="shMail">E-mail</a>
+      <button type="button" id="shCopy">Kopírovat vtip a odkaz</button>
+    </div>
+    <div class="dlg-actions"><button value="close">Zavřít</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
