@@ -38,7 +38,7 @@ If you use another repository name or a custom domain, change `SITE_URL` in `con
 In the repository, edit `config.js` and set `API_URL: 'https://script.google.com/macros/s/…/exec'`. Commit, then open the site.
 
 ## Everyday use
-- **Approve a submitted joke:** it appears at the bottom of the *Vtipy* tab with source *Od čtenáře* and *Na webu* unticked. Tick it to publish, or delete the row.
+- **Approve a submitted joke:** it appears at the bottom of the *Vtipy* tab with source *Od čtenáře* and *Na webu* unticked, and on the *Ke schválení* tab, which lists everything still waiting. The morning desk sweep puts new ones on the desk. Tick *Na webu* to publish, or move the row to *Vyřazené*.
 - **Add your own joke:** type it into the *Vtip* column on the first empty row. ID, source, *Na webu* and date fill in by themselves, and it's live within two minutes.
 - **Remove a joke from the site:** untick *Na webu*.
 - **Categories:** column O *Kategorie*. Change it freely; a new name simply becomes a new filter chip.
